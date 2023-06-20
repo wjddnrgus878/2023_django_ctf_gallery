@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Nano Folio - Simple HTML Template</title>
+	<link rel="stylesheet" href="fontawesome/css/all.min.css"> <!-- https://fontawesome.com/ -->
+	<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet"> <!-- https://fonts.google.com/ -->
+	<link href="css/magnific-popup.min.css" rel="stylesheet">
+    <link href="css/tooplate-style.css" rel="stylesheet">
+<!--
+
+Tooplate 2122 Nano Folio
+
+https://www.tooplate.com/view/2122-nano-folio
+
+-->
+
+</head>
+<body>
+	{% block asd %}
+	{% endblock %}
+	<nav id="nav2">
+		<ul>
+			<li><a href="./sign/in">로그인</a></li>
+			<li><a href="./sign/up">회원가입</a></li>
+			<li><a href="./adm">관리자</a></li>
+			Your name is {{ id }}
+			<li><a href="./sign/out">로그아웃</li>
+		</ul>
+	</nav>
+	
+	<div class="tm-container-fluid">
+		<section class="tm-site-header tm-flex-center tm-mb-50 tm-bgcolor-1 tm-border-rounded">
+			<form method="post" enctype="multipart/form-data" action="./upload">
+				<input type="file" name="document">
+				<button type="submit">File Upload</button>
+			</form>
+			<br>
+			{% if file_name %}
+				<a href="/download/{{ file_name }}"><button type="button">Download</button></a>
+			{% endif %}
+			<i class="fas fa-heart fa-3x"></i>
+		</section>
+		<section class="tm-site-header tm-flex-center tm-mb-50 tm-bgcolor-3 tm-border-rounded">		
+			{% if file_name %}
+            	<img class="tm-site-header tm-flex-center tm-mb-50 tm-border-rounded" src="/media/file/{{file_name}}">
+				<h2>Your file name is {{ file_name }}</h2>
+			{% else %}
+				<h2>Your file name will appear here</h2>
+			{% endif %}
+		</section>
+	</div>
+	
+
+	<script src="js/jquery.min.js"></script>
+	<script src="js/imagesloaded.pkgd.min.js"></script>
+	<script src="js/isotope.pkgd.min.js"></script>
+	<script src="js/jquery.magnific-popup.min.js"></script>
+	<script>
+		$(function(){
+		  	// Init the image gallery
+		  	var $gallery = $(".tm-gallery").isotope({
+		    	itemSelector: ".tm-gallery-item",
+		    	layoutMode: "fitRows"
+		  	});
+		  
+		  	// Layout Isotope after each image loads
+		  	$gallery.imagesLoaded().progress(function() {
+		    	$gallery.isotope("layout");
+		  	});
+
+		  	$(".filters-button-group").on("click", "a", function(e) {
+		  		e.preventDefault();
+			    var filterValue = $(this).attr("data-filter");
+			    $gallery.isotope({ filter: filterValue });
+			    $('.filters-button-group a').removeClass('active');
+			    $(this).addClass('active');
+			});
+
+		  	// Magnific Pop up
+		  	$('.tm-gallery').magnificPopup({
+		  		delegate: 'a',
+			  	type: 'image',
+				  gallery: { enabled: true }
+			});
+		});
+	</script>
+</body>
+</html>
