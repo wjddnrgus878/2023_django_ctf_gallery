@@ -43,19 +43,16 @@ class SignInView(View):
         data=json.loads(request.body)
         email = data.get('email')
         password = data.get('password')
-        print(password)
 
         if email and password:
             with connection.cursor() as cursor:
                 cursor.execute(f"SELECT * FROM accounts WHERE email = '{email}' and password = '{password}'")
                 user = cursor.fetchone()
-                print(user)
 
                 if user:
-                    request.session['id']=user[2]
-                    request.session['is_admin']=user[1]
+                    request.session['id']=user[1]
+                    request.session['is_admin']=user[3]
                     user_id = request.session.get('id')
-                    print(user_id)
                     return JsonResponse({'id': user_id}, status=200)
                 else:
                     return JsonResponse({'message':'등록되지 않은 이메일 입니다.'}, status=400)

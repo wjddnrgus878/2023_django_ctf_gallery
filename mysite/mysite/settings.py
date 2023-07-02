@@ -27,8 +27,22 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/var/log/django/django.log',
+        },
+    },
+    'root': {
+        'handlers': ['file'],
+        'level': 'DEBUG',
+    },
+}
 
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -49,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'mysite.middlewares.BlockStaticMiddleware',
 ]
 
 ROOT_URLCONF = 'mysite.urls'
@@ -82,8 +97,8 @@ DATABASES = {
         'NAME': 'ad_web',
         'USER': 'root',
         'PASSWORD': '1234',
-        'HOST': 'mysql-container',
-        'PORT': '3307',
+        'HOST': 'db',
+        'PORT': '3306',
     }
 }
 
@@ -119,17 +134,13 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
-
 STATIC_URL = '/static/'
-STATIC_ROOT = '/static/'
-STATICFILES_DIRS = (
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
-)
+]
 
 MEDIA_URL = '/media/'
-
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type

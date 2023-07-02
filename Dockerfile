@@ -8,8 +8,13 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
     apt-get install -y tzdata && \
     ln -fs /usr/share/zoneinfo/Asia/Seoul /etc/localtime && dpkg-reconfigure -f noninteractive tzdata && \
-    apt-get install -y mysql-server python3 python3-pip apache2 libapache2-mod-wsgi-py3 openssh-server libmysqlclient-dev && \
-    apt-get clean && rm -rf /var/lib/apt/lists/* && \
+    apt-get install -y pkg-config mysql-server python3 python3-pip python3-dev build-essential libssl-dev libffi-dev python3-setuptools python3-wheel nginx gunicorn libmysqlclient-dev && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /var/log/django/ && \
+    touch /var/log/django/django.log && \
+    chown -R root:root /var/log/django
+    
 
 # Set work directory
 WORKDIR /var/www/html/
@@ -22,23 +27,17 @@ RUN pip3 install -r requirements.txt
 # Copy source code to work directory
 COPY . .
 
-# Enable apache rewrite module
-RUN a2enmod rewrite
-
 # Change owner and group for the html directory
 RUN chown -R www-data:www-data /var/www/html
 
 WORKDIR /var/www/html/mysite
 
-# sshd service setting
-RUN echo 'root:root' | chpasswd # need change
-RUN mkdir /var/run/sshd
-RUN chmod 0755 /var/run/sshd   # /var/run/sshd 권한 변경
-RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+# Copy Nginx configuration
+COPY nginx.conf /etc/nginx/sites-available/
+RUN ln -s /etc/nginx/sites-available/nginx.conf /etc/nginx/sites-enabled
 
-# Expose port 8000 for Django
+# Expose port 80 for Nginx
 EXPOSE 80
 
-# Start ssh and Django service
-CMD exec /bin/bash -c "cd /home/user/django-web/mysite; /etc/init.d/ssh start; python3 manage.py makemigrations; python3 manage.py migrate; python3 manage.py runserver 0.0.0.0:8000"
-
+# Start Gunicorn and Nginx
+CMD exec /bin/bash -c "service nginx start; gunicorn mysite.wsgi:application --bind 0.0.0.0:8000 --chdir/var/www/html/mysite"

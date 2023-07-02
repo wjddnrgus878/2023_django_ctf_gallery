@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
-from django.http import FileResponse
+from django.views.static import serve as static_serve
+from django.http import FileResponse, HttpResponseForbidden
 from PIL import Image
 
 def file_upload(request):

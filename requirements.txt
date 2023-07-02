@@ -3,3 +3,4 @@ mysqlclient
 Pillow
 pytz
 tzdata
+whitenoise
