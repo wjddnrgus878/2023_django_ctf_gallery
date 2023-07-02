@@ -25,7 +25,7 @@ RUN pip3 install --upgrade pip
 RUN pip3 install -r requirements.txt
 
 # Copy source code to work directory
-COPY . .
+COPY ./mysite /var/www/html/mysite
 
 # Change owner and group for the html directory
 RUN chown -R www-data:www-data /var/www/html
