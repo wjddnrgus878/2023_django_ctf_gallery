@@ -6,5 +6,5 @@ from django.conf import settings
 urlpatterns = [
     path('' , views.index,name = 'index'),
     path('upload', views.file_upload),
-    path('download/<str:filename>', views.download, name='download'),
+    path('download/<path:filepath>', views.download, name='download'),
 ]

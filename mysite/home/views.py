@@ -1,7 +1,8 @@
+import os
 from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
 from django.views.static import serve as static_serve
-from django.http import FileResponse, HttpResponseForbidden
+from django.http import FileResponse, HttpResponse, HttpResponseForbidden
 from PIL import Image
 
 def file_upload(request):
@@ -17,7 +18,9 @@ def index(request):
     msg = 'My Message'
     return render(request, 'index.html', {'message': msg})
 
-def download(request, filename):
-    fs = FileSystemStorage(location='media/file/')
-    file_path = fs.path(filename)
-    return FileResponse(open(file_path, 'rb'), as_attachment=True)
+def download(request, filepath):
+    file_path = os.path.normpath(os.path.join('media/file', filepath))
+    with open(file_path, 'rb') as f:
+        response = HttpResponse(f.read(), content_type="application/force-download")
+        response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+        return response
