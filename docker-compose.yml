@@ -1,32 +1,157 @@
 version: '3'
 
 services:
-  db:
+  db1:
     image: mysql:latest
-    container_name: mysql-container
+    container_name: mysql-container_1
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 1234
       MYSQL_DATABASE: ad_web
     volumes:
-      - db_data:/var/lib/mysql
+      - db_data1:/var/lib/mysql
     ports:
       - "3308:3306"
     networks:
       - mynetwork
 
-  web:
+  db2:
+    image: mysql:latest
+    container_name: mysql-container_2
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: ad_web
+    volumes:
+      - db_data2:/var/lib/mysql
+    ports:
+      - "3309:3306"
+    networks:
+      - mynetwork
+
+  db3:
+    image: mysql:latest
+    container_name: mysql-container_3
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: ad_web
+    volumes:
+      - db_data3:/var/lib/mysql
+    ports:
+      - "3310:3306"
+    networks:
+      - mynetwork
+
+  db4:
+    image: mysql:latest
+    container_name: mysql-container_4
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: ad_web
+    volumes:
+      - db_data4:/var/lib/mysql
+    ports:
+      - "3311:3306"
+    networks:
+      - mynetwork
+
+  db5:
+    image: mysql:latest
+    container_name: mysql-container_5
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: ad_web
+    volumes:
+      - db_data5:/var/lib/mysql
+    ports:
+      - "3312:3306"
+    networks:
+      - mynetwork
+
+  web1:
     build: .
     command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py collectstatic --no-input && service nginx start; gunicorn mysite.wsgi:application --bind 0.0.0.0:8000"
+    environment:
+      - DATABASE_NAME=db1
+      - DATABASE_HOST=mysql-container_1
+      - DATABASE_PORT=3306
     ports:
-      - 8000:8000
+      - 60001:8000
+      - 6001:22
     depends_on:
-      - db
+      - db1
+    networks:
+      - mynetwork
+
+  web2:
+    build: .
+    command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py collectstatic --no-input && service nginx start; gunicorn mysite.wsgi:application --bind 0.0.0.0:8000"
+    environment:
+      - DATABASE_NAME=db2
+      - DATABASE_HOST=mysql-container_2
+      - DATABASE_PORT=3306
+    ports:
+      - 60002:8000
+      - 6002:22
+    depends_on:
+      - db2
+    networks:
+      - mynetwork
+
+  web3:
+    build: .
+    command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py collectstatic --no-input && service nginx start; gunicorn mysite.wsgi:application --bind 0.0.0.0:8000"
+    environment:
+      - DATABASE_NAME=db3
+      - DATABASE_HOST=mysql-container_3
+      - DATABASE_PORT=3306
+    ports:
+      - 60003:8000
+      - 6003:22
+    depends_on:
+      - db3
+    networks:
+      - mynetwork
+
+  web4:
+    build: .
+    command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py collectstatic --no-input && service nginx start; gunicorn mysite.wsgi:application --bind 0.0.0.0:8000"
+    environment:
+      - DATABASE_NAME=db4
+      - DATABASE_HOST=mysql-container_4
+      - DATABASE_PORT=3306
+    ports:
+      - 60004:8000
+      - 6004:22
+    depends_on:
+      - db4
+    networks:
+      - mynetwork
+
+  web5:
+    build: .
+    command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py collectstatic --no-input && service nginx start; gunicorn mysite.wsgi:application --bind 0.0.0.0:8000"
+    environment:
+      - DATABASE_NAME=db5
+      - DATABASE_HOST=mysql-container_5
+      - DATABASE_PORT=3306
+    ports:
+      - 60005:8000
+      - 6005:22
+    depends_on:
+      - db5
     networks:
       - mynetwork
 
 volumes:
-  db_data:
+  db_data1:
+  db_data2:
+  db_data3:
+  db_data4:
+  db_data5:
 
 networks:
   mynetwork:
