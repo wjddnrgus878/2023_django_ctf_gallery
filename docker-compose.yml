@@ -75,12 +75,12 @@ services:
     build: .
     command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py collectstatic --no-input && service nginx start; gunicorn mysite.wsgi:application --bind 0.0.0.0:8000"
     environment:
-      - DATABASE_NAME=db1
+      - DATABASE_NAME=db_team
       - DATABASE_HOST=mysql-container_1
       - DATABASE_PORT=3306
     ports:
-      - 60001:8000
-      - 6001:22
+      - "60001:8000"
+      - "6001:22"
     depends_on:
       - db1
     networks:
@@ -90,12 +90,12 @@ services:
     build: .
     command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py collectstatic --no-input && service nginx start; gunicorn mysite.wsgi:application --bind 0.0.0.0:8000"
     environment:
-      - DATABASE_NAME=db2
+      - DATABASE_NAME=db_team
       - DATABASE_HOST=mysql-container_2
       - DATABASE_PORT=3306
     ports:
-      - 60002:8000
-      - 6002:22
+      - "60002:8000"
+      - "6002:22"
     depends_on:
       - db2
     networks:
@@ -105,12 +105,12 @@ services:
     build: .
     command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py collectstatic --no-input && service nginx start; gunicorn mysite.wsgi:application --bind 0.0.0.0:8000"
     environment:
-      - DATABASE_NAME=db3
+      - DATABASE_NAME=db_team
       - DATABASE_HOST=mysql-container_3
       - DATABASE_PORT=3306
     ports:
-      - 60003:8000
-      - 6003:22
+      - "60003:8000"
+      - "6003:22"
     depends_on:
       - db3
     networks:
@@ -120,12 +120,12 @@ services:
     build: .
     command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py collectstatic --no-input && service nginx start; gunicorn mysite.wsgi:application --bind 0.0.0.0:8000"
     environment:
-      - DATABASE_NAME=db4
+      - DATABASE_NAME=db_team
       - DATABASE_HOST=mysql-container_4
       - DATABASE_PORT=3306
     ports:
-      - 60004:8000
-      - 6004:22
+      - "60004:8000"
+      - "6004:22"
     depends_on:
       - db4
     networks:
@@ -135,12 +135,12 @@ services:
     build: .
     command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py collectstatic --no-input && service nginx start; gunicorn mysite.wsgi:application --bind 0.0.0.0:8000"
     environment:
-      - DATABASE_NAME=db5
+      - DATABASE_NAME=db_team
       - DATABASE_HOST=mysql-container_5
       - DATABASE_PORT=3306
     ports:
-      - 60005:8000
-      - 6005:22
+      - "60005:8000"
+      - "6005:22"
     depends_on:
       - db5
     networks:
